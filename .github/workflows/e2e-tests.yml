@@ -1,0 +1,84 @@
+# =============================================================================
+# E2E Test Pipeline — Starter Workflow
+# =============================================================================
+#
+# Requirements:
+#   - Trigger on push to main and on pull requests
+#   - Install dependencies and run the full E2E test suite
+#   - Upload test artifacts (screenshots, reports, videos)
+#
+# Tips:
+#   - Playwright: https://playwright.dev/docs/ci#github-actions
+# =============================================================================
+
+name: E2E Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-22.04
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up Node.js (specify a version)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # npm dependency cache (avoids installing on every run)
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Playwright browser cache
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      # Install browsers
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      # Run your test suite
+      - name: Run E2E tests
+        run: npx playwright test
+
+      # Upload HTML report
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 15
+
+      # Upload test artifacts
+      - name: Upload test results on failure
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 7

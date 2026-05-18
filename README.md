@@ -1,195 +1,87 @@
 # Psynth — QA Engineer Take-Home Assessment
 
-## Welcome
-
-Thank you for your interest in the QA Engineer role at **Psynth**! This take-home assessment is designed to evaluate your hands-on skills in E2E test automation, CI/CD integration, test planning, and bug reporting.
-
-**Estimated time:** 2–3 hours
-**Deadline:** Please submit within **5 calendar days** of receiving this assignment.
+- Candidate: Seyla Gomez
+- Framework: Playwright · JavaScript
+- App: **https://www.saucedemo.com**
 
 ---
 
-## Target Application
+## Getting Started
 
-You will write tests against **SauceDemo**, an open demo e-commerce app by Sauce Labs:
-
-🔗 **https://www.saucedemo.com**
-
-### Available Credentials
-
-| Username                  | Description                         |
-| ------------------------- | ----------------------------------- |
-| `standard_user`           | Normal user — all features work     |
-| `locked_out_user`         | Locked out — login should fail      |
-| `problem_user`            | Broken images and form behavior     |
-| `performance_glitch_user` | Simulated slow responses            |
-| `error_user`              | Triggers various application errors |
-| `visual_user`             | Visual/layout inconsistencies       |
-
-**Password for all users:** `secret_sauce`
-
-Take a few minutes to explore the app manually before you start writing tests.
-
----
-
-## Assessment Structure
-
-This assessment has **4 parts**. All parts are required unless marked as bonus.
-
-### Part 1 — Test Plan (document)
-
-Create a file called `TEST_PLAN.md` in the root of this repo. It must include:
-
-1. **Scope:** Which user journeys and pages you chose to cover, and why.
-2. **Test cases:** A prioritized list of test cases (at least **10**) covering:
-   - Happy-path flows (login → browse → cart → checkout)
-   - Negative/edge cases (invalid login, empty cart, missing form fields)
-   - At least one cross-user scenario (e.g., `problem_user` vs. `standard_user`)
-3. **Out of scope:** What you intentionally excluded and why (given the 2–3 hr constraint).
-4. **Risk assessment:** Which areas of the app are most likely to break and why.
-
-### Part 2 — E2E Test Automation (code)
-
-Implement automated tests for **at least 6** of the test cases from your test plan.
-
-#### Requirements
-
-- **Framework:** Use **Cypress** or **Playwright** (your choice).
-- **Language:** JavaScript or TypeScript.
-- **Structure:** Tests must be organized in the `tests/` directory (or framework default like `cypress/e2e/`). Use page objects or a similar abstraction pattern — do **not** put all selectors inline.
-- **Test independence:** Each test must be runnable independently (no reliance on test execution order).
-- **Assertions:** Use meaningful assertions — not just "page loaded" checks.
-- **Data cleanup:** Tests should handle their own setup/teardown where needed.
-
-#### What we look for
-
-- Clean, readable, and maintainable test code.
-- Proper use of selectors (prefer `data-test` attributes where available over brittle CSS/XPath).
-- Sensible waits and retry strategies (no hard-coded `sleep` / `wait` calls).
-- Clear test naming that describes the behavior being verified.
-
-### Part 3 — CI/CD Integration (GitHub Actions)
-
-Set up a GitHub Actions workflow so that your tests run automatically.
-
-#### Requirements
-
-- Create or complete the workflow file at `.github/workflows/e2e-tests.yml`.
-- The workflow must:
-  - Trigger on **push** to `main` and on **pull requests**.
-  - Install dependencies and run the full test suite.
-  - Upload test results/reports as **artifacts** (screenshots on failure, HTML report, or video — whatever your framework supports).
-- A starter workflow file is provided as a reference — you may modify or replace it entirely.
-
-#### What we look for
-
-- A working pipeline that passes when tests pass and fails when tests fail.
-- Proper caching of dependencies for faster runs.
-- Artifact uploads so we can review test results without cloning the repo.
-
-### Part 4 — Bug Report
-
-While exploring the app (especially with `problem_user` or `error_user`), you will encounter bugs.
-
-Create a file called `BUG_REPORT.md` with **at least 2 bug reports**. Each report must follow this format:
-
-```
-## Bug Title
-
-**Severity:** Critical / High / Medium / Low
-**User(s) affected:** (which test user)
-**Environment:** Browser, OS
-
-### Steps to Reproduce
-1. Step one
-2. Step two
-3. ...
-
-### Expected Result
-What should happen.
-
-### Actual Result
-What actually happens.
-
-### Evidence
-Screenshot or test output (paste inline or link to a file in the repo).
-
-### Notes
-Any additional context, root cause hypothesis, or recommended fix.
-```
-
----
-
-## Repo Setup
-
-### Getting Started
-
-1. **Clone or download** this repository.
-2. Initialize your framework of choice:
-
-   **Cypress:**
-
-   ```bash
-   npm init -y
-   npm install -D cypress
-   npx cypress open   # to scaffold folders
-   ```
-
-   **Playwright:**
+1. **Clone or download** the repository.
+2. Initialize the framework: **Playwright:**
+  > Requirements: Node.js v24+
 
    ```bash
    npm init -y
    npm install -D @playwright/test
    npx playwright install
    ```
-
-3. Write your tests in the `tests/` folder (Playwright) or `cypress/e2e/` folder (Cypress).
-4. Push your work to a **personal GitHub repository** and invite sbpsynth as a collaborator.
-
-### Provided Files
-
-| File                              | Purpose                                    |
-| --------------------------------- | ------------------------------------------ |
-| `README.md`                       | This file — your instructions              |
-| `.github/workflows/e2e-tests.yml` | Starter CI workflow (modify as needed)     |
-| `tests/.gitkeep`                  | Placeholder for your test files            |
-| `.gitignore`                      | Standard ignores for node_modules, reports |
+3. Run the full test suite:
+   ```bash
+   npx playwright test
+   ```
+4. Open the HTML report
+   ```bash
+   npx playwright show-report
+   ```
 
 ---
 
-## Submission Checklist
+## Project structure
 
-Before submitting, make sure you have:
-
-- [ ] `TEST_PLAN.md` with at least 10 prioritized test cases
-- [ ] At least 6 automated E2E tests that pass against SauceDemo
-- [ ] Page object or similar abstraction pattern used
-- [ ] Tests are independent and use no hard-coded waits
-- [ ] `.github/workflows/e2e-tests.yml` runs tests on push/PR
-- [ ] CI artifacts uploaded (screenshots, reports, or videos)
-- [ ] `BUG_REPORT.md` with at least 2 detailed bug reports
-- [ ] All code is clean, commented, and well-organized
-- [ ] `README` or notes explaining how to run tests locally
+```
+QA-ASSESSMENT
+├── .github/
+│   └── workflows/
+│       └── e2e-tests.yml       # CI pipeline (GA)
+├── tests/
+│   ├── fixtures/
+│   │   └── users.js            # Centralized credentials
+│   ├── pages/                  # Page Object Model
+│   │   ├── LoginPage.js
+│   │   ├── InventoryPage.js
+│   │   ├── CartPage.js
+│   │   └── CheckoutPage.js
+│   ├── login.spec.js           # TC-001, TC-006
+│   ├── inventory.spec.js       # TC-002
+│   ├── cart.spec.js            # TC-003
+│   ├── checkout.spec.js        # TC-004
+│   └── logout.spec.js          # TC-005
+├── TEST_PLAN.md
+├── BUG_REPORT.md
+└── playwright.config.js
+```
 
 ---
 
-## Evaluation Criteria
+## Test coverage
 
-| Area              | Weight |
-| ----------------- | ------ |
-| Test plan quality | 20%    |
-| Automation code   | 35%    |
-| CI/CD integration | 20%    |
-| Bug reports       | 15%    |
-| Code style & docs | 10%    |
+| Test Case | Summary |	Priority |	Users |
+|---|---|---|---|
+TC-001 |Successful login for user | P1 | U1, U3, U4, U5, U6 
+TC-002 |Product sorting | P1 | U1
+TC-003 |Cart: add and remove product| P1 | U1 
+TC-004 |Checkout: successful purchase| P1 | U1
+TC-005 |Successful logout for user| P1 | U1, U3, U4, U5, U6  
+TC-006 |Login blocked for U2| P1 |U2
+
+> 19 tests total · 1 browser (Firefox) · 19 passed (25.7s)
 
 ---
 
-## Important Notes
+## Technical decisions
 
-- You are free to use any npm packages, plugins, or utilities you find helpful.
-- If you run into issues with the demo app being down, document it and test what you can.
-- We value **quality over quantity** — 6 solid tests beat 20 flaky ones.
-- If anything is unclear, reply to the email that sent you this assignment.
+- Playwright in Cypress: Offers more natural asynchronous handling for complex flows.
+- Page Object Model: Each page has its own class that centralizes selectors and actions. If SauceDemo modifies a selector, the change is applied in only one place, instead of across all specification files.
+- `data-test` attributes: These are used instead of CSS classes whenever available, as they are stable under style refactoring.
+- No hard-coded waits: Playwright handles all timings using built-in automatic waits (toBeVisible, toHaveURL, toHaveCount).
+- users.js file: Credentials are centralized in a single file, so any changes to them are automatically propagated to all tests.
+- The test suite runs on Firefox by default. It's possible to add Chromium or WebKit in `playwright.config.js` within `projects`.
+- TC-001 and TC-005 iterate over multiple credentials, generating a separate test for each user, demonstrating that tests remain isolated and preventing code duplication.
 
-Good luck! We look forward to reviewing your work. 🚀
+---
+
+## CI/CD
+
+- Tests run automatically on every push to main/PR via GA.

@@ -1,0 +1,27 @@
+{
+  "name": "qa-assessment",
+  "version": "1.0.0",
+  "description": "Thank you for your interest in the QA Engineer role at **Psynth**! This take-home assessment is designed to evaluate your hands-on skills in E2E test automation, CI/CD integration, test planning, and bug reporting.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damarisg/qa-assessment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/damarisg/qa-assessment/issues"
+  },
+  "homepage": "https://github.com/damarisg/qa-assessment#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
